@@ -1,0 +1,105 @@
+### Visual Studio ###
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific folders
+.vscode/
+.idea/
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bin/
+obj/
+
+# NUnit
+*.VisualState.xml
+TestResult*/
+
+# Build Logs
+*.tlog
+*.log
+
+# External cache
+.cache/
+
+# Package files
+*.nupkg
+*.snupkg
+
+# Mono Auto Generated Files
+mono_crash.*
+
+### IntelliJ IDEA ###
+# Project specific files
+.idea/
+out/
+*.iml
+
+### .NET ###
+# Visual Studio Code
+.vscode/
+
+# Visual Studio
+.vs/
+
+# Rider
+.idea/
+.idea.modules
+.idea.storageData/
+.idea.workspace.xml
+.idea/misc.xml
+.idea/vcs.xml
+.idea/modules.xml
+
+# Libraries
+*.dll
+*.exe
+*.app
+*.dmg
+*.pkg
+*.so
+*.a
+*.lib
+*.pdb
+*.mdb
+*.tmp
+*.tmpfile
+*.testresults
+*.TestResults
+
+# Output Folders
+bin/
+obj/
+debug/
+release/
+publish/
+debug-x64/
+release-x64/
+
+# Temporary Files
+*.tmp
+~$*
+*.dbmdl
+*.mdf
+*.ldf
+
+# Bootstrap build artifacts
+wwwroot/css/bootstrap*
+wwwroot/js/bootstrap*
+
+# IDE workspace files
+*.idea/*
+*.vs/*
+*.sln/*
+*.suo/*
+
+### End ###

@@ -1,0 +1,91 @@
+﻿@page "/notes/edit/{id:int}"
+@using Notes.Data
+@using Notes.Services
+@inject PersonService PersonService
+@inject NavigationManager Navigation
+
+<h1>Edit</h1>
+
+<h4>Person</h4>
+<hr />
+
+<EditForm Model="Person" OnValidSubmit="HandleEdit" FormName="editPersonForm">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="firstName">First Name</label>
+        <InputText id="firstName" class="form-control" @bind-Value="Person.FirstName" />
+        <ValidationMessage For="@(() => Person.FirstName)" />
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="lastName">Last Name</label>
+        <InputText id="lastName" class="form-control" @bind-Value="Person.LastName" />
+        <ValidationMessage For="@(() => Person.LastName)" />
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="dateOfBirth">Date of Birth</label>
+        <InputDate id="dateOfBirth" class="form-control" @bind-Value="Person.DateOfBirth" />
+        <ValidationMessage For="@(() => Person.DateOfBirth)" />
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="gender">Gender</label>
+        <InputSelect id="gender" class="form-control" @bind-Value="Person.Gender">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </InputSelect>
+        <ValidationMessage For="@(() => Person.Gender)" />
+    </div>
+
+    <div class="form-group">
+        <label for="phoneNumber">Phone Number</label>
+        <InputText id="phoneNumber" class="form-control" @bind-Value="Person.PhoneNumber" />
+        <ValidationMessage For="@(() => Person.PhoneNumber)" />
+    </div>
+
+    <div class="form-group">
+        <span class="text-danger">*</span>
+        <label for="email">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="Person.Email" />
+        <ValidationMessage For="@(() => Person.Email)" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+</EditForm>
+
+<div>
+    <a href="/people">Back to List</a>
+</div>
+
+@code {
+    [Parameter] public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    public Person? Person { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Person = await PersonService.GetPersonByIdAsync(Id);
+
+        if (Person == null)
+        {
+            Navigation.NavigateTo("/people");
+        }
+    }
+
+    private async Task HandleEdit()
+    {
+        await PersonService.UpdatePersonAsync(Person);
+        Navigation.NavigateTo("/people");
+    }
+}

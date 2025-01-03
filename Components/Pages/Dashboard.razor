@@ -3,49 +3,58 @@
 @using Notes.Services
 @inject NoteService NoteService
 @inject NavigationManager Navigation
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
 @using Microsoft.AspNetCore.Components.Authorization
+@using Notes.Components.Account
+
+@inject NoteService NoteService
+@inject NavigationManager Navigation
+@inject UserManager<ApplicationUser> UserManager
+@inject IdentityUserAccessor UserAccessor
 
 <h1>Notes Dashboard</h1>
 
 <AuthorizeView>
-<p>
+    <p>
         <a href="/notes/create" class="btn btn-success">Create New</a>
-</p>
+    </p>
 </AuthorizeView>
 
 @if (notes != null)
 {
     <table class="table">
         <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Date</th>
-            <th>Mood</th>
-            <th>Message</th>
-            <AuthorizeView>
-                <th>Actions</th>
-            </AuthorizeView>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in notes)
-        {
             <tr>
-                <td>@item.FirstName</td>
-                <td>@item.LastName</td>
-                <td>@item.Date.ToShortDateString()</td>
-                <td>@item.Mood</td>
-                <td>@item.Message</td>
+                <th>Email</th>
+                <th>Date</th>
+                <th>Mood</th>
+                <th>Message</th>
                 <AuthorizeView>
-                    <td>
-                        <a href="/notes/edit/@item.Id" class="btn btn-warning">Edit</a> |
-                        <a href="/notes/details/@item.Id" class="btn btn-info">Details</a> |
-                        <a href="/notes/delete/@item.Id" class="btn btn-danger">Delete</a>
-                    </td>
+                    <th>Actions</th>
                 </AuthorizeView>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var item in notes)
+            {
+                <tr>
+                    <td>@item.FirstName</td>
+                    <td>@item.Date.ToShortDateString()</td>
+                    <td>@item.Mood</td>
+                    <td>@item.Message</td>
+                    <AuthorizeView>
+                        <td>
+                            <a href="/notes/details/@item.Id" class="btn btn-info">Details</a>
+                            @if (item.FirstName == email)
+                            {
+                                <a href="/notes/edit/@item.Id" class="btn btn-warning ms-1">Edit</a>
+                                <a href="/notes/delete/@item.Id" class="btn btn-danger">Delete</a>
+                            }
+                        </td>
+                    </AuthorizeView>
+                </tr>
+            }
         </tbody>
     </table>
 }
@@ -55,10 +64,20 @@ else
 }
 
 @code {
-    private List<Note> notes;
+    private ApplicationUser user = default!;
+    private string? email;
+
+    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
         notes = await NoteService.GetAllNotesAsync();
+        user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        email = await UserManager.GetEmailAsync(user);
+
     }
+
+    private List<Note> notes;
+    // private string userEmail = "andre.sadlek@gmail.com";  Wartość email, którą chcesz wykorzystać.
+
 }

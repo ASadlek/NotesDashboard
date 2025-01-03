@@ -15,9 +15,6 @@
             <dt class="col-sm-2">First Name:</dt>
             <dd class="col-sm-10">@_note.FirstName</dd>
 
-            <dt class="col-sm-2">Last Name:</dt>
-            <dd class="col-sm-10">@_note.LastName</dd>
-
             <dt class="col-sm-2">Date:</dt>
             <dd class="col-sm-10">@_note.Date.ToShortDateString()</dd>
 
@@ -31,7 +28,6 @@
     </div>
 
     <div>
-        <a href="/notes/edit/@_note.Id" class="btn btn-primary">Edit</a> |
         <a href="/notes" class="btn btn-secondary">Back to List</a>
     </div>
 }

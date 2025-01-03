@@ -16,7 +16,6 @@ builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-builder.Services.AddScoped<PersonService>();
 builder.Services.AddScoped<NoteService>();
 
 builder.Services.AddAuthentication(options =>

@@ -7,12 +7,8 @@ public class Note
     public int Id { get; set; }
 
     [Required(ErrorMessage = "First name is required")]
-    [StringLength(20)]
+    [StringLength(40)]
     public string FirstName { get; set; }
-
-    [Required(ErrorMessage = "Last name is required")]
-    [StringLength(20)]
-    public string LastName { get; set; }
 
     [Required(ErrorMessage = "Date is required")]
     public DateTime Date { get; set; }

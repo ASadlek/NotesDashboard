@@ -1,91 +1,86 @@
 ﻿@page "/notes/edit/{id:int}"
 @using Notes.Data
 @using Notes.Services
-@inject PersonService PersonService
+@inject NoteService NoteService
 @inject NavigationManager Navigation
+
 
 <h1>Edit</h1>
 
-<h4>Person</h4>
+<h4>Note</h4>
 <hr />
 
-<EditForm Model="Person" OnValidSubmit="HandleEdit" FormName="editPersonForm">
+<EditForm Model="Note" OnValidSubmit="HandleCreate" FormName="createNoteForm">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="form-group">
         <span class="text-danger">*</span>
-        <label for="firstName">First Name</label>
-        <InputText id="firstName" class="form-control" @bind-Value="Person.FirstName" />
-        <ValidationMessage For="@(() => Person.FirstName)" />
+        <label for="firstName">Author's First Name</label>
+        <InputText id="firstName" class="form-control" @bind-Value="Note.FirstName" />
+        <ValidationMessage For="@(() => Note.FirstName)" />
     </div>
 
     <div class="form-group">
         <span class="text-danger">*</span>
-        <label for="lastName">Last Name</label>
-        <InputText id="lastName" class="form-control" @bind-Value="Person.LastName" />
-        <ValidationMessage For="@(() => Person.LastName)" />
+        <label for="lastName">Author's Last Name</label>
+        <InputText id="lastName" class="form-control" @bind-Value="Note.LastName" />
+        <ValidationMessage For="@(() => Note.LastName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="date">Date</label>
+        <InputDate id="date" class="form-control" @bind-Value="Note.Date" readonly />
+        <ValidationMessage For="@(() => Note.Date)" />
     </div>
 
     <div class="form-group">
         <span class="text-danger">*</span>
-        <label for="dateOfBirth">Date of Birth</label>
-        <InputDate id="dateOfBirth" class="form-control" @bind-Value="Person.DateOfBirth" />
-        <ValidationMessage For="@(() => Person.DateOfBirth)" />
-    </div>
-
-    <div class="form-group">
-        <span class="text-danger">*</span>
-        <label for="gender">Gender</label>
-        <InputSelect id="gender" class="form-control" @bind-Value="Person.Gender">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
+        <label for="mood">Mood</label>
+        <InputSelect id="mood" class="form-control" @bind-Value="Note.Mood">
+            <option value="Happy">Happy</option>
+            <option value="Excited">Excited</option>
+            <option value="Sad">Sad</option>
+            <option value="Angry">Angry</option>
             <option value="Other">Other</option>
         </InputSelect>
-        <ValidationMessage For="@(() => Person.Gender)" />
-    </div>
-
-    <div class="form-group">
-        <label for="phoneNumber">Phone Number</label>
-        <InputText id="phoneNumber" class="form-control" @bind-Value="Person.PhoneNumber" />
-        <ValidationMessage For="@(() => Person.PhoneNumber)" />
+        <ValidationMessage For="@(() => Note.Mood)" />
     </div>
 
     <div class="form-group">
         <span class="text-danger">*</span>
-        <label for="email">Email</label>
-        <InputText id="email" class="form-control" @bind-Value="Person.Email" />
-        <ValidationMessage For="@(() => Person.Email)" />
+        <label for="message">Message</label>
+        <InputText id="message" class="form-control" @bind-Value="Note.Message" />
+        <ValidationMessage For="@(() => Note.Message)" />
     </div>
 
     <div class="form-group">
-        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-primary">Create</button>
     </div>
 </EditForm>
 
 <div>
-    <a href="/people">Back to List</a>
+    <a href="/notes">Back to Dashboard</a>
 </div>
 
 @code {
-    [Parameter] public int Id { get; set; }
+
+    [Parameter]
+    public int Id { get; set; }
 
     [SupplyParameterFromForm]
-    public Person? Person { get; set; } = new();
+    public Note Note { get; set; } = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        Person = await PersonService.GetPersonByIdAsync(Id);
-
-        if (Person == null)
-        {
-            Navigation.NavigateTo("/people");
-        }
+        Note.Date = DateTime.Today;
     }
 
-    private async Task HandleEdit()
+    private async Task HandleCreate()
     {
-        await PersonService.UpdatePersonAsync(Person);
-        Navigation.NavigateTo("/people");
+        await NoteService.AddNoteAsync(Note);
+
+        await NoteService.DeleteNoteAsync(Id);
+        Navigation.NavigateTo("/notes");
     }
 }

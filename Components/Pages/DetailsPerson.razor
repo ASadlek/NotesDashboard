@@ -1,60 +1,56 @@
 ﻿@page "/notes/details/{id:int}"
 @using Notes.Data
 @using Notes.Services
-@inject PersonService PersonService
+@inject NoteService NoteService
 @inject NavigationManager Navigation
 
 <h1>Details</h1>
 
-@if (_person != null)
+@if (_note != null)
 {
     <div>
-        <h4>Person</h4>
+        <h4>Note</h4>
         <hr />
         <dl class="row">
             <dt class="col-sm-2">First Name:</dt>
-            <dd class="col-sm-10">@_person.FirstName</dd>
+            <dd class="col-sm-10">@_note.FirstName</dd>
 
             <dt class="col-sm-2">Last Name:</dt>
-            <dd class="col-sm-10">@_person.LastName</dd>
+            <dd class="col-sm-10">@_note.LastName</dd>
 
-            <dt class="col-sm-2">Date of Birth:</dt>
-            <dd class="col-sm-10">@_person.DateOfBirth.ToShortDateString()</dd>
+            <dt class="col-sm-2">Date:</dt>
+            <dd class="col-sm-10">@_note.Date.ToShortDateString()</dd>
 
-            <dt class="col-sm-2">Gender:</dt>
-            <dd class="col-sm-10">@_person.Gender</dd>
+            <dt class="col-sm-2">Mood:</dt>
+            <dd class="col-sm-10">@_note.Mood</dd>
 
-            <dt class="col-sm-2">Phone Number:</dt>
-            <dd class="col-sm-10">@_person.PhoneNumber</dd>
+            <dt class="col-sm-2">Message:</dt>
+            <dd class="col-sm-10">@_note.Message</dd>
 
-            <dt class="col-sm-2">Email:</dt>
-            <dd class="col-sm-10">@_person.Email</dd>
         </dl>
     </div>
 
     <div>
-        <a href="/people/edit/@_person.Id" class="btn btn-primary">Edit</a> |
-        <a href="/people" class="btn btn-secondary">Back to List</a>
+        <a href="/notes/edit/@_note.Id" class="btn btn-primary">Edit</a> |
+        <a href="/notes" class="btn btn-secondary">Back to List</a>
     </div>
 }
 else
 {
-    <p>Person not found.</p>
+    <p>Note not found.</p>
 }
 
 @code {
     [Parameter] public int Id { get; set; }
-    private Person _person = new();
+    private Note _note = new();
 
     protected override async Task OnInitializedAsync()
     {
-        // Fetch the person details based on the provided Id
-        _person = await PersonService.GetPersonByIdAsync(Id);
+        _note = await NoteService.GetNoteByIdAsync(Id);
 
-        // If person is not found, navigate back to the list
-        if (_person == null)
+        if (_note == null)
         {
-            Navigation.NavigateTo("/people");
+            Navigation.NavigateTo("/notes");
         }
     }
 }

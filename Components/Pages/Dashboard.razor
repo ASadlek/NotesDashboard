@@ -1,7 +1,7 @@
 ﻿@page "/notes"
 @using Notes.Data
 @using Notes.Services
-@inject PersonService PersonService
+@inject NoteService NoteService
 @inject NavigationManager Navigation
 @using Microsoft.AspNetCore.Components.Authorization
 
@@ -13,32 +13,30 @@
 </p>
 </AuthorizeView>
 
-@if (people != null)
+@if (notes != null)
 {
     <table class="table">
         <thead>
         <tr>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Date of Birth</th>
-            <th>Gender</th>
-            <th>Phone Number</th>
-            <th>Email</th>
+            <th>Date</th>
+            <th>Mood</th>
+            <th>Message</th>
             <AuthorizeView>
                 <th>Actions</th>
             </AuthorizeView>
         </tr>
         </thead>
         <tbody>
-        @foreach (var item in people)
+        @foreach (var item in notes)
         {
             <tr>
                 <td>@item.FirstName</td>
                 <td>@item.LastName</td>
-                <td>@item.DateOfBirth.ToShortDateString()</td>
-                <td>@item.Gender</td>
-                <td>@item.PhoneNumber</td>
-                <td>@item.Email</td>
+                <td>@item.Date.ToShortDateString()</td>
+                <td>@item.Mood</td>
+                <td>@item.Message</td>
                 <AuthorizeView>
                     <td>
                         <a href="/notes/edit/@item.Id" class="btn btn-warning">Edit</a> |
@@ -57,11 +55,10 @@ else
 }
 
 @code {
-    private List<Person> people;
+    private List<Note> notes;
 
     protected override async Task OnInitializedAsync()
     {
-        // Fetch the list of people from the PersonService
-        people = await PersonService.GetAllPeopleAsync();
+        notes = await NoteService.GetAllNotesAsync();
     }
 }

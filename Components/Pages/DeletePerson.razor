@@ -1,63 +1,61 @@
 ﻿@page "/notes/delete/{id:int}"
 @using Notes.Data
 @using Notes.Services
-@inject PersonService PersonService
+@inject NoteService NoteService
 @inject NavigationManager Navigation
 
 <h1>Delete</h1>
 
 <h3>Are you sure you want to delete this?</h3>
 
-@if (_person != null)
+@if (_note != null)
 {
     <div>
-        <h4>Person</h4>
+        <h4>Note</h4>
         <hr />
         <dl class="row">
             <dt class="col-sm-2">First Name:</dt>
-            <dd class="col-sm-10">@_person.FirstName</dd>
+            <dd class="col-sm-10">@_note.FirstName</dd>
             <dt class="col-sm-2">Last Name:</dt>
-            <dd class="col-sm-10">@_person.LastName</dd>
-            <dt class="col-sm-2">Date of Birth:</dt>
-            <dd class="col-sm-10">@_person.DateOfBirth.ToShortDateString()</dd>
-            <dt class="col-sm-2">Gender:</dt>
-            <dd class="col-sm-10">@_person.Gender</dd>
-            <dt class="col-sm-2">Phone Number:</dt>
-            <dd class="col-sm-10">@_person.PhoneNumber</dd>
-            <dt class="col-sm-2">Email:</dt>
-            <dd class="col-sm-10">@_person.Email</dd>
+            <dd class="col-sm-10">@_note.LastName</dd>
+            <dt class="col-sm-2">Date:</dt>
+            <dd class="col-sm-10">@_note.Date.ToShortDateString()</dd>
+            <dt class="col-sm-2">Mood:</dt>
+            <dd class="col-sm-10">@_note.Mood</dd>
+            <dt class="col-sm-2">Messanger:</dt>
+            <dd class="col-sm-10">@_note.Message</dd>
         </dl>
 
-        <EditForm Model="_person" OnValidSubmit="HandleDelete" FormName="@($"deletePersonForm-{_person.Id}")">
+        <EditForm Model="_note" OnValidSubmit="HandleDelete" FormName="@($"deleteNoteForm-{_note.Id}")">
             <button type="submit" class="btn btn-danger">Delete</button> |
         </EditForm>
         
-        <a href="/people">Back to List</a>
+        <a href="/notes">Back to Dashboard</a>
     </div>
 }
 else
 {
-    <p>Person not found.</p>
+    <p>Note not found.</p>
 }
 
 @code {
     [Parameter] public int Id { get; set; }
     
-    private Person _person;
+    private Note _note;
 
     protected override async Task OnInitializedAsync()
     {
-        _person = await PersonService.GetPersonByIdAsync(Id);
+        _note = await NoteService.GetNoteByIdAsync(Id);
 
-        if (_person == null)
+        if (_note == null)
         {
-            Navigation.NavigateTo("/people");
+            Navigation.NavigateTo("/notes");
         }
     }
 
     private async Task HandleDelete()
     {
-        await PersonService.DeletePersonAsync(Id);
-        Navigation.NavigateTo("/people");
+        await NoteService.DeleteNoteAsync(Id);
+        Navigation.NavigateTo("/notes");
     }
 }
